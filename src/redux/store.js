@@ -1,8 +1,9 @@
-import { configureStore } from "@reduxjs/toolkit";
+import { configureStore, combineReducers } from "@reduxjs/toolkit";
 import cartReducer from "./cartReducer";
+import filterReducer from "./filterReducer";
 
 // export const store = configureStore({
-//   reducer: { cart: cartReducer },
+//   reducer: { cart: cartReducer , filters: filterReducer },
 // });
 
 // For hold the data after the refresh the page we use redux -persists
@@ -25,10 +26,24 @@ const persistConfig = {
   storage,
 };
 
-const persistedReducer = persistReducer(persistConfig, cartReducer);
+const reducers = combineReducers({
+  cart: cartReducer,
+  filters: filterReducer,
+});
+
+const persistedReducer = persistReducer(
+  persistConfig,
+  // cartReducer,
+  // filterReducer
+  reducers
+);
 
 export const store = configureStore({
-  reducer: { cart: persistedReducer },
+  reducer:
+    // cart: persistedReducer,
+    // filters: filterReducer
+    persistedReducer,
+
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: {
